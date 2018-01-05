@@ -1,0 +1,293 @@
+Lesson 4: Publish and Subscribe
+From RDuval Wiki
+
+Python_4:_Advanced_Python
+
+Publish_Subscribe_Example
+
+This lesson
+
+   - program structuring
+   - Publish and Subscribe
+
+On Program Structure
+
+1. every part of your program will communicate via known APIs 
+   - accomplishing that can be a real challenge
+2. When you are writing frameworks to be used in a wide variety of circumstances
+   - it can be difficult to predict the environment
+     Data must be produced
+     but it may be consumed by a variety of functions
+3. Consider a spreadsheet example
+   - may display both a bar chart and a pie chart of the same data
+   -  How does the code that updates the cells as users type in new numbers know to update the graphics
+     - how many graphics there are? 
+4. answer lies in a generic technique known as "publish-and-subscribe"
+   - a general mechanism to allow flexible distribution of data
+
+Publish and Subscribe
+
+1. Thanks to publish-and-subscribe and similar systems
+   - data producers do not need to know in advance who will be using their data
+2. term "data producer" deliberately vague
+   - because publish-and-subscribe is a broad and encompassing architectural pattern
+   - data producer (the "publisher" element in publish-and-subscribe) 
+      * might be a stock price ticker that periodically spits out new prices for stocks
+      * a weather forecasting program that produces new forecasts every six hours
+      * even the lowly ticket machine that provides people with numbers to take turns at a grocery counter
+3. Anyone who wants to make use of the data must subscribe 
+   - (typically by calling a method of the producer object to "register" a subscription)
+   - then when new data is available, 
+     * it is distributed to all subscribers by the publisher calling a method of each of the subscribed objects with the new information as an argument
+4. "loosens the coupling" between the producers and consumers of data
+   - allowing each to be written in a general way
+   - independent of each other
+5. Each subscriber needs to know only about its own relationship with the publisher
+
+Publish and Subscribe in Action
+
+1. Suppose you have a class Publisher
+   - whose instances can be given objects to publish
+   - and that a number of consumers are potentially interested in consuming that "data feed."
+2. Publisher class will need methods to allow the subscribers to subscribe 
+   - when they want to start receiving the feed 
+   - unsubscribe when they no longer require it
+3. consumers have to know how the Publisher will transmit the data to them
+   - which will normally be achieved by calling one of its methods
+4. consumers may need to provide an API to satisfy the requirements of the Publisher
+5. For our purposes, we'll write a module that asks for lines of input from the user
+   - then distributes the lines to any subscribed consumers
+6. The subscriber interface will have subscribe and unsubscribe methods 
+   - that add and remove items from the publisher's subscriber list
+7. Subscribers must provide a "process" method, which the publisher will call with each new input 
+8. We will have the subscribers print the input string after processing it in basic, but distinguishable ways. 
+  - In the first example, subscribers print out the uppercase version of the string they've received.
+9. Create a Python4_Lesson04 project and add it to your Python4_Lessons working set. Then, create pubandsub.py in your Python4_Lesson04/src folder as shown:
+Publish_Subscribe_Example
+10. program asks you for three lines of input
+    The first is echoed in uppercase once, the second twice, and the third three times,
+    because each time through the loop, a new subscriber is subscribed to the publisher. 
+ ---
+ OBSERVE:
+ Input 0: pub
+ PUB
+ Input 1: and
+ AND
+ AND
+ Input 2: sub
+ SUB
+ SUB
+ SUB
+ ------------
+ a. Publisher keeps a list of subscribers (which starts out empty).
+ b. Subscribing an object appends it to the subscriber list; 
+ c. unsubscribing an object removes it. 
+11. SimpleSubscriber object takes a publisher as an argument to the __init__() 
+    method and immediately subscribes to the publisher.
+
+same principles can be applied to programs already use
+
+1. example, a spreadsheet program may have to process spreadsheets
+  - there are multiple graphics based on the data
+     all of which must be updated as the data changes
+2. One way to arrange that is to enlist the graphics as subscribers to an event stream publisher
+   a. which publishes an alert every time any change is made to the data
+   b. To avoid unnecessary computing
+      the event stream publisher might publish the event after a change only when no further changes were made to the data
+      within a fixed (and preferably short) period of time 
+   c. refine this process further in various ways because:
+      - it allows very loose coupling between the publisher and the subscriber
+      - neither needs to have advance knowledge of the other
+        - the connections are created at run-time rather than determined in advance
+   d. loose coupling in systems design because it's flexible and allows dynamic relationships between objects
+
+Validating Requests and Identifying Output
+
+1. initial implementation is defective in a couple of ways
+    a. First, there is nothing to stop a given subscriber from being subscribed multiple times
+    b. there is nothing present to check whether a subscriber requesting unsubscription 
+       (code not yet exercised in the main program) is actually subscribed
+    c. Passing a nonexistent subscriber would cause the list's remove() method to raise an exception
+2. OBSERVE:
+   >>> [1, 2, 3].remove(4)
+   Traceback (most recent call last):
+   File "<console>", line 1, in <module>
+   ValueError: list.remove(x): x not in list
+   >>> 
+3. to make the message associated with the exception easier to understand
+   - trap it or test beforehand for the condition that would cause the exception
+   - then raise your own, more meaningful, exception 
+4. the original version of our program
+   - does not identify which specific subscriber is responsible for an individual message
+   - to identify the culprit will make the operation of the program easier to understand
+     - revise it so that each subscriber instance takes an additional argument (its name)
+       - it will then use to identify all of its output 
+5. Modify pubandsub.py Publish_Subscribe_Example
+   to check for errors and identify subscribers 
+6. version of the program doesn't actually trigger any of the newly-added exceptions
+   - but the inclusion of the tests makes our code more robust
+   - SimpleSubscriber.process() method identifies each output line with the name of the instance
+     that was responsible for it, which can be especially helpful in more complex situations. 
+   - code that creates the subscribers generates names such as "Sub0", "Sub1" and so on for the subscribers
+     You should see output that looks like this:
+      - 
+      OBSERVE:
+      Input 0: sub
+      Sub0 : SUB
+      Input 1: and
+      Sub0 : AND
+      Sub1 : AND
+      Input 2: pub
+      Sub0 : PUB
+      Sub1 : PUB
+      Sub2 : PUB
+7.  to write unit tests for this code
+    - include an assertRaises() test to ensure that the double-subscription
+    - attempts to remove non-subscribed objects were handled correctly
+    In the absence of unit tests, we should at least make sure that exceptions will be raised under expected circumstances. 
+    We can do that in an interactive console with the help of Eclipse.
+    Console pane, click Open Console and select PyDev Console from the drop-down menu that appears:
+8. Select Console for currently active editor and click OK
+    - Now you will be able to import modules from the Python4-Lesson04/src directory. 
+      Next, verify that exceptions are properly raised: 
+ -------
+ INTERACTIVE CONSOLE SESSION
+ >>> from pubandsub import Publisher 
+ >>> publisher = Publisher()                  
+ >>> publisher.unsubscribe(None)
+ Traceback (most recent call last):
+   File "<console>", line 1, in <module>
+   File "pubandsub.py", line 16, in unsubscribe
+     raise ValueError("Can only unsubscribe subscribers")
+ ValueError: Can only unsubscribe subscribers
+ >>> publisher.subscribe(None)
+ >>> publisher.subscribe(None)
+ Traceback (most recent call last):
+   File "<console>", line 1, in <module>
+   File "pubandsub.py", line 12, in subscribe
+     raise ValueError("Multiple subscriptions are not allowed")
+ ValueError: Multiple subscriptions are not allowed
+ >>>
+
+Modify for doc test
+
+1. Since exceptions appear to be raised under the correct circumstances, 
+   - we could proceed without modifying the code further
+   - a good idea to copy and paste the interactive session into your source as a doctest
+2.  copy-and-paste from the console panel is not adequate
+    because the console is designed to let you copy and paste only the code
+    so when you copy from the interactive session in Eclipse, the necessary prompt strings
+   (">>> " and "... ") are absent from the pasted content. doctest 
+3. program has not tested the non-error branch of the unsubscribe code
+   -  perform that test by restricting the number of subscribers
+      * can be done either internally (from within the Publisher.subscribe() method
+      * or by truncating the subscription list from the main loop
+        - going to do the latter
+   - add a few loops to make sure that the strategy is properly tested
+      * After each new subscription, we'll remove the least recent if the length of the subscription list exceeds three
+      * This will ensure that no input sees more than three responses
+4. Modify pubandsub.py as shown: Publish_Subscribe_Example
+   - This code is not much different from the last example:
+     except that there are never more than three responses to any input which indicates that the unsubscribe function is working correctly   
+     Each time the subscriber count exceeds three it is trimmed from the left:
+  OBSERVE:
+  Input 0: sub
+  Sub0 : SUB
+  Input 1: and
+  Sub0 : AND
+  Sub1 : AND
+  Input 2: pub
+  Sub0 : PUB
+  Sub1 : PUB
+  Sub2 : PUB
+  Input 3: more
+  Sub1 : MORE
+  Sub2 : MORE
+  Sub3 : MORE
+  Input 4: inputs
+  Sub2 : INPUTS
+  Sub3 : INPUTS
+  Sub4 : INPUTS
+
+Making the Algorithm More General
+
+1. At present, the publisher requires subscribers to have a "process" method
+   - which it calls to have each subscriber process the published data
+   - works well enough, but it does constrain the nature of the subscribers
+     For example, there is no way to subscribe functions, because there is no way to add a method to a function 
+2. modify the program so that it:
+   - registers the callable method directly instead of registering an instance and then calling a specific method
+   - program will then allow any callable to be registered
+   -  We'll verify this by defining a simple function and registering it with the publisher before the loop begins
+3. Modify pubandsub.py to allow registration of any callable:
+   Publish_Subscribe_Example
+   - SimpleSubscriber object now registers its (bound) process method as a callable, and the Publisher.publish() method calls
+     the subscribers directly rather than calling a method of the subscriber. 
+   This makes it possible to subscribe functions to the Publisher:
+  OBSERVE:
+Input 0: pub
+pubpub
+Sub0 : PUB
+Input 1: and
+andand
+Sub0 : AND
+Sub1 : AND
+Input 2: sub
+subsub
+Sub0 : SUB
+Sub1 : SUB
+Sub2 : SUB
+Input 3: and
+Sub0 : AND
+Sub1 : AND
+Sub2 : AND
+Sub3 : AND
+Input 4: dub
+Sub1 : DUB
+Sub2 : DUB
+Sub3 : DUB
+Sub4 : DUB
+Input 5: and
+Sub2 : AND
+Sub3 : AND
+Sub4 : AND
+Sub5 : AND
+-----
+4. Note The full "publish and subscribe" algorithm is general enough to allow communication between completely different processes. 
+    Technically, we have been studying a subset of publish-and-subscribe also referred to as "the observer pattern."  
+5. A Note on Debugging
+   - Eclipse has some advanced debugging features, but we've ignored them. You won't always have Eclipse at your disposal
+    (at least when you aren't in the lab), so instead, we've directed our attention to assuring your code through testing. 
+   - The relatively simple expedient of inserting print() calls in your code is good enough to solve many problems, 
+     and in the upcoming project the most important part of the exercise is to use this technique to discover exactly 
+     how the suggested modification breaks the program.
+
+Lesson 4, Quiz 1 
+Question 1: What is the primary purpose of the publish-and-subscribe mechanism? 
+Publish-and-subscribe mechanism provides a means to distribute data to users that subscribe to that distribution.
+
+a general mechanism to allow flexible distribution of data
+
+- 
+
+Question 2: What does the Publisher object do if an already-registered object tries to register a new subscription? 
+The Publisher object raises a Value Error.
+
+- 
+
+Question 3: Why is it better to allow the registration of arbitrary methods?
+The publisher can call the subscriber directly rather the call thru a subscriber method. 
+
+-
+
+Lesson 4, Project 1
+
+Here are your instructions: 
+1. Modify the Subscriber.process() method so that the instance counts the number of times the method has been called. 
+2. If, after processing the current message, it has processed three messages, it unsubscribes itself. 
+3. Remove the unsubscribe code from the loop at the end of the main program, since it should no longer be necessary. 
+4. Insert print() statements in your modified program until you think you have worked out 
+   why it no longer operates correctly, 
+   and see if you can suggest a way to fix it (whether or not you are able to implement your suggestion).
+
+Publish_Subscribe_Example 

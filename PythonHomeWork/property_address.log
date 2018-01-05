@@ -1,0 +1,30 @@
+2013-11-11 20:48:53,885 - INFO - __init__ - Creating a new address
+2013-11-11 20:48:53,887 - INFO - __init__ - Creating a new address
+2013-11-11 20:48:53,888 - ERROR - state - STATE exception
+2013-11-11 20:48:53,888 - ERROR - state - STATE exception
+2013-11-11 20:48:53,888 - ERROR - state - STATE exception
+2013-11-11 20:48:53,888 - ERROR - state - STATE exception
+2013-11-11 20:48:53,888 - INFO - __init__ - Creating a new address
+2013-11-11 20:48:53,888 - ERROR - zip_code - ZIPCODE exception
+2013-11-11 20:48:53,888 - ERROR - zip_code - ZIPCODE exception
+2013-11-11 20:48:53,889 - ERROR - zip_code - ZIPCODE exception
+2013-11-19 22:22:59,571 - INFO - __init__ - Creating a new address
+2013-11-19 22:22:59,612 - INFO - __init__ - Creating a new address
+2013-11-19 22:22:59,612 - ERROR - state - STATE exception
+2013-11-19 22:22:59,613 - ERROR - state - STATE exception
+2013-11-19 22:22:59,613 - ERROR - state - STATE exception
+2013-11-19 22:22:59,613 - ERROR - state - STATE exception
+2013-11-19 22:22:59,613 - INFO - __init__ - Creating a new address
+2013-11-19 22:22:59,614 - ERROR - zip_code - ZIPCODE exception
+2013-11-19 22:22:59,614 - ERROR - zip_code - ZIPCODE exception
+2013-11-19 22:22:59,614 - ERROR - zip_code - ZIPCODE exception
+2013-11-20 12:36:43,036 - INFO - __init__ - Creating a new address
+2013-11-20 12:36:43,036 - INFO - __init__ - Creating a new address
+2013-11-20 12:36:43,036 - ERROR - state - STATE exception
+2013-11-20 12:36:43,036 - ERROR - state - STATE exception
+2013-11-20 12:36:43,036 - ERROR - state - STATE exception
+2013-11-20 12:36:43,036 - ERROR - state - STATE exception
+2013-11-20 12:36:43,036 - INFO - __init__ - Creating a new address
+2013-11-20 12:36:43,052 - ERROR - zip_code - ZIPCODE exception
+2013-11-20 12:36:43,052 - ERROR - zip_code - ZIPCODE exception
+2013-11-20 12:36:43,052 - ERROR - zip_code - ZIPCODE exception
