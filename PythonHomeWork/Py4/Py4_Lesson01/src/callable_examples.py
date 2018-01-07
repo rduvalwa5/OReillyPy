@@ -3,7 +3,6 @@ Created on May 25, 2014
 
 @author: rduvalwa2
 '''
-
 from timeit import timeit
 from pprint import pprint
 

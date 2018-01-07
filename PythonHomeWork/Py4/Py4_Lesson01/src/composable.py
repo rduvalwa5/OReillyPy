@@ -1,7 +1,6 @@
 """
 composable.py: defines a composable function class.
 """
-
 import types
 class Composable:
 

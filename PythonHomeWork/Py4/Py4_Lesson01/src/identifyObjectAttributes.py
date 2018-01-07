@@ -4,7 +4,6 @@ Created on May 26, 2014
 @author: rduvalwa2
 '''
 
-
 from pprint import pprint
 
 def g(x):
