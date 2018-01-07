@@ -7,16 +7,12 @@ import re
 import logging
 
 LOG_FILENAME = "" 
-CONFIG_FILE = "/Users/rduvalwa2/DevTools/eclipse-indigo/workspace/Python3_Git/Py3_Git/Python3_Homework12/src/propertyaddress.cfg"
+CONFIG_FILE = "V:\workspace\Python3_Homework12\src\propertyaddress.cfg"
 LOG_FORMAT = ""
-USAGE = "Usage: property_address.py [options] \nproperty_address.py: error: options -n, -a, -c, -s, -z are required "
+STATE_CODES = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","AS","GU","MP","PR","VI","FM","MH","PW","AA","AE","AP","CM","CZ","NB","PI"]
+USAGE = "property_address.py: error: options -n, -a, -c, -s, -z are required "
 
-config = configparser.RawConfigParser()
-config.read(CONFIG_FILE)
-zip_rule = config.get('validators', 'zip_code')
-state_rule = config.get('validators', 'state')
-
-DEFAULT_LOG_LEVEL = "error"
+DEFAULT_LOG_LEVEL =  "error"
 LEVELS = {'debug': logging.DEBUG,
           'info': logging.INFO,
           'warning': logging.WARNING,
@@ -26,7 +22,8 @@ LEVELS = {'debug': logging.DEBUG,
 
 def start_logging(filename=LOG_FILENAME, level=DEFAULT_LOG_LEVEL):
     "Start logging with given filename and level."
-    logging.basicConfig(filename=filename, level=LEVELS[level.lower()], format=LOG_FORMAT) 
+    logging.basicConfig(filename=filename, level=LEVELS[level.lower()],format=LOG_FORMAT) # add format to config
+ 
 class ZipCodeError(AttributeError):
     pass    
       
@@ -50,7 +47,7 @@ class Address(object):
         return self._name
   
     @name.setter
-    def name(self, value):
+    def name(self,value):
         raise AttributeError
         
     @property
@@ -58,7 +55,7 @@ class Address(object):
         return self._street_address
   
     @street_address.setter
-    def street_address(self, value):
+    def street_address(self,value):
         self._street_address = value 
         
     @property
@@ -66,7 +63,7 @@ class Address(object):
         return self._city
   
     @city.setter
-    def city(self, value):
+    def city(self,value):
         self._city = value 
         
     @property
@@ -74,22 +71,25 @@ class Address(object):
         return self._state
   
     @state.setter
-    def state(self, value):
-        pat = re.compile(state_rule)
+    def state(self,value):
+        pat = re.compile('[A-Z]{2}')
         mat = pat.match(value)
         if mat == None:
             logging.error('STATE exception')
-            raise StateError
-        else:  
-            self._state = value     
+            raise StateError        
+        elif value in STATE_CODES:
+            self._state = value
+        else:
+            logging.error('STATE exception')
+            raise StateError      
         
     @property
     def zip_code(self):
         return self._zip_code
   
     @zip_code.setter
-    def zip_code(self, value):
-        pat = re.compile(zip_rule)
+    def zip_code(self,value):
+        pat = re.compile('^[\d]{5,5}$')  #at least 5, but not more than 5 digits
         mat = pat.match(value) 
         if mat == None:
             logging.error('ZIPCODE exception')
@@ -102,24 +102,29 @@ class Address(object):
 
 def main(options):
     "routes requests"
-    Address(name=options.name, street_address=options.address, city=options.city, state=options.state, zip_code=options.zip_code)
+    home = Address(name=options.name, street_address=options.address, city=options.city, state=options.state, zip_code=options.zip_code)
     
-if __name__ == '__main__':    
-    LOG_FORMAT = config.get('log', 'format')
-    LOG_FILENAME = config.get('log', 'output')
+if __name__ == '__main__':
+    config = configparser.RawConfigParser()
+    config.read(CONFIG_FILE)
+    
+    LOG_FORMAT = config.get('log','format')
+    LOG_FILENAME = config.get('log','output')
+    zip_rule = config.get('validators', 'zip_code')
+    state_rule = config.get('validators', 'state')
     parser = OptionParser(usage=USAGE)
-    parser.add_option("-l", "--level",
-                        action="store",
-                        dest="level",
+    parser.add_option("-l", "--level", 
+                        action="store", 
+                        dest="level",  
                         default="INFO",
                         help="Sets the log level to DEBUG, INFO, WARNING, ERROR, and CRITICAL")
 
-    parser.add_option('-n', '--name', '--action', dest="name", action="store", help="Sets the name value of the Address object")
-    parser.add_option('-a', '--address', dest="address",
+    parser.add_option('-n', '--name', '--action', dest="name", action="store",help="Sets the name value of the Address object")
+    parser.add_option('-a', '--address', dest="address", 
                             action="store", help="Sets the street_address value of the Address object")
-    parser.add_option('-c', '--city', dest="city", action="store", help="Sets the city value of the Address object")  
-    parser.add_option('-s', '--state', dest="state", action="store", help="Sets the state value of the Address object")
-    parser.add_option('-z', '--zip', dest='zip_code', action='store', help="Sets the zip_code value of the Address object")
+    parser.add_option('-c', '--city', dest="city", action="store",help="Sets the city value of the Address object")  
+    parser.add_option('-s', '--state', dest="state", action="store",help="Sets the state value of the Address object")
+    parser.add_option('-z', '--zip', dest='zip_code', action='store',help="Sets the zip_code value of the Address object")
     (options, args) = parser.parse_args()
     
     start_logging(filename=LOG_FILENAME, level=(options.level).lower()) 
@@ -141,22 +146,27 @@ if __name__ == '__main__':
         logging.error('State exception: No state attribute')
         parser.error("require -s state")
     else:
-        pat = re.compile(state_rule)
+        pat = re.compile(state_rule)  #at least 5, but not more than 5 digits
         mat = pat.match(options.state) 
         if mat == None:
             logging.error('State exception: Rule Match')
             raise StateError        
+        if options.state not in STATE_CODES:
+            logging.error('State exception: Not State Code')
+            raise StateError             
+        elif mat.group() == options.state: 
+            pass
                        
     if options.zip_code is None:
         logging.error('Zipcode exception: No zip code attribute')
         parser.error("require -z zipcode")
     else:
-        pat = re.compile(zip_rule) 
+        pat = re.compile(zip_rule)  #at least 5, but not more than 5 digits
         mat = pat.match(options.zip_code) 
         if mat == None:
             logging.error('ZIPCODE exception: Rule Match')
             if options.level == "WARNING":
-                parser.error("usage: property_address.py [options]\nproperty_address.py: error: option -z requires a valid 5-digit US zip code ")
+                parser.error("usage: property_address.py [options]property_address.py: error: option -z requires a valid 5-digit US zip code")
             raise ZipCodeError
         elif mat.group() == options.zip_code:
             pass                 

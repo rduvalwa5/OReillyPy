@@ -1,28 +1,11 @@
-2013-11-11 20:48:53,885 - INFO - __init__ - Creating a new address
-2013-11-11 20:48:53,887 - INFO - __init__ - Creating a new address
-2013-11-11 20:48:53,888 - ERROR - state - STATE exception
-2013-11-11 20:48:53,888 - ERROR - state - STATE exception
-2013-11-11 20:48:53,888 - ERROR - state - STATE exception
-2013-11-11 20:48:53,888 - ERROR - state - STATE exception
-2013-11-11 20:48:53,888 - INFO - __init__ - Creating a new address
-2013-11-11 20:48:53,888 - ERROR - zip_code - ZIPCODE exception
-2013-11-11 20:48:53,888 - ERROR - zip_code - ZIPCODE exception
-2013-11-11 20:48:53,889 - ERROR - zip_code - ZIPCODE exception
-2013-11-23 09:42:38,853 - INFO - __init__ - Creating a new address
-2013-11-23 09:42:38,909 - INFO - __init__ - Creating a new address
-2013-11-23 09:42:38,911 - ERROR - state - STATE exception
-2013-11-23 09:42:38,911 - ERROR - state - STATE exception
-2013-11-23 09:42:38,911 - ERROR - state - STATE exception
-2013-11-23 09:42:38,911 - ERROR - state - STATE exception
-2013-11-23 09:42:38,912 - INFO - __init__ - Creating a new address
-2013-11-23 09:42:38,912 - ERROR - zip_code - ZIPCODE exception
-2013-11-23 09:42:38,912 - ERROR - zip_code - ZIPCODE exception
-2013-11-23 09:42:38,912 - ERROR - zip_code - ZIPCODE exception
-2013-11-23 09:44:51,793 - INFO - __init__ - Creating a new address
-2013-11-23 09:45:21,655 - INFO - __init__ - Creating a new address
-2013-11-23 09:45:56,878 - INFO - __init__ - Creating a new address
-2013-11-23 09:48:02,085 - INFO - __init__ - Creating a new address
-2013-11-23 10:03:18,808 - INFO - __init__ - Creating a new address
-2013-11-23 10:03:52,225 - INFO - __init__ - Creating a new address
-2013-11-23 10:04:20,776 - INFO - __init__ - Creating a new address
-2013-11-23 10:04:20,796 - ERROR - zip_code - ZIPCODE exception
+
+2013-11-23 20:41:40,172 - root - INFO - Creating a new address
+2013-11-23 20:44:18,934 - root - INFO - Creating a new address
+2013-11-23 20:44:33,376 - root - INFO - Creating a new address
+2013-11-23 21:25:49,374 - root - INFO - Creating a new address
+2013-11-23 21:26:35,022 - root - ERROR - State exception: Not State Code
+2013-11-23 21:38:19,894 - root - ERROR - State exception: Rule Match
+2013-11-23 21:39:01,088 - root - ERROR - State exception: Not State Code
+2013-11-23 21:40:48,630 - root - INFO - Creating a new address
+2013-11-23 21:44:26,772 - root - ERROR - ZIPCODE exception: Rule Match
+2013-11-23 21:45:41,418 - root - ERROR - ZIPCODE exception: None

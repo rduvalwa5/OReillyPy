@@ -1,0 +1,6 @@
+2013-11-06 21:15:33,468 root:ERROR:forestry.py function:__init__ line:34 Tree size must be one of: S,M,L,XL,XXL
+2013-11-06 21:15:33,468 root:ERROR:forestry.py function:cut_down_tree line:61 Cannot cut_down_tree(): Lumberjack has no tree!
+2013-11-06 21:15:58,640 root:ERROR:forestry.py function:__init__ line:34 Tree size must be one of: S,M,L,XL,XXL
+2013-11-06 21:15:58,641 root:ERROR:forestry.py function:cut_down_tree line:61 Cannot cut_down_tree(): Lumberjack has no tree!
+level:ERROR line:35
+level:ERROR line:62

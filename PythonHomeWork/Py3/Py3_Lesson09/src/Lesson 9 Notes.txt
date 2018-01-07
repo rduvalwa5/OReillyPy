@@ -1,0 +1,163 @@
+Lesson 9 Notes
+
+E:\Python\Lesson_9>python
+Python 3.3.0 (v3.3.0:bd8afb90ebf2, Sep 29 2012, 10:57:17) [MSC v.1600 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from newmagic import *
+>>> s = ustr("Stevie Wonder")
+>>> s
+'STEVIE WONDER'
+>>> type(s)
+<class 'newmagic.ustr'>
+>>> s.lower()
+'stevie wonder'
+>>> len(s)
+13
+>>> ss = "Stevie Wonder"
+>>> ss.size = 5
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'str' object has no attribute 'size'
+>>> s
+'STEVIE WONDER'
+>>> from newmagic import *
+>>> s
+'STEVIE WONDER'
+
+E:\Python\Lesson_9>python
+Python 3.3.0 (v3.3.0:bd8afb90ebf2, Sep 29 2012, 10:57:17) [MSC v.1600 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from strmagic import *
+>>> p1 = Person("Danny Kay")
+>>> p1
+<strmagic.Person object at 0x00000000026CFDD8>
+>>> print(pi)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'pi' is not defined
+>>> print(p1)
+<strmagic.Person object at 0x00000000026CFDD8>
+>>> print(str(p1))
+<strmagic.Person object at 0x00000000026CFDD8>
+>>> print(p1.name)
+Danny Kay
+>>> p2 = NamedPerson("Danny Thomas")
+>>> p2
+<strmagic.NamedPerson object at 0x00000000026CFE80>
+>>> print(p2)
+Danny Thomas
+>>>
+>>> repr(p1)
+'<strmagic.Person object at 0x00000000026CFDD8>'
+>>> repr(p2)
+'<strmagic.NamedPerson object at 0x00000000026CFE80>'
+>>>
+
+>>> from reprmagic import *
+>>> o1 = neither()
+>>> print(str(o1), repr(o1))
+<reprmagic.neither object at 0x000000000261FD68> <reprmagic.neither object at 0x000000000261FD68>
+>>> o2 = stronly()
+>>> print(str(o2), repr(o2))
+STR <reprmagic.stronly object at 0x00000000026241D0>
+>>> o3 = repronly()
+>>> print(str(o3),repr(o3))
+REPR REPR
+>>> o4 = both()
+>>> print(str(o4),repr(o4))
+STR REPR
+>>> o1
+<reprmagic.neither object at 0x000000000261FD68>
+>>> o2
+<reprmagic.stronly object at 0x00000000026241D0>
+>>> o3
+REPR
+>>> o4
+REPR
+>>> steve = Person("Steve Wonder", 56)
+>>> print(str(steve), repr(steve))
+Steve Wonder Person('Steve Wonder', 56)
+>>> John = Person('John Lennon', 'deceased')
+>>> John
+Person('John Lennon', 'deceased')
+>>> John.__dict__
+{'name': 'John Lennon', 'age': 'deceased'}
+>>> o4.__dict__
+{}
+>>> setattr(John,'name', '70')
+>>> John.__dict__
+{'name': '70', 'age': 'deceased'}
+>>> setattr(John,'name', 'Jack')
+>>> John.__dict__
+{'name': 'Jack', 'age': 'deceased'}
+>>> setattr(John,'age', 70)
+>>> John.__dict__
+{'name': 'Jack', 'age': 70}
+>>> getattr(John,'name')
+'Jack'
+>>> getattr(John,'age')
+70
+>>> hasattr(John,'age')
+True
+>>> setattr(John,'home','Liverpool')
+>>> John.__dict__
+{'name': 'Jack', 'home': 'Liverpool', 'age': 70}
+>>> setattr(John,'country', 'England')
+>>> John.__dict__
+{'home': 'Liverpool', 'country': 'England', 'age': 70, 'name': 'Jack'}
+>>> setattr(John,'delete','gone')
+>>> John.__dict__
+{'home': 'Liverpool', 'country': 'England', 'age': 70, 'name': 'Jack', 'delete': 'gone'}
+>>> delattr(John,'delete')
+>>> John.__dict__
+{'home': 'Liverpool', 'country': 'England', 'age': 70, 'name': 'Jack'}
+>>> Paul = Person('Paul McCartney',72)
+>>> Paul.__dict__
+{'age': 72, 'name': 'Paul McCartney'}
+>>> Paul = John
+>>> Paul.__dict__
+{'home': 'Liverpool', 'country': 'England', 'age': 70, 'name': 'Jack'}
+>>> print(Paul,John)
+Jack Jack
+>>> Paul
+Person('Jack', 70)
+>>> John
+Person('Jack', 70)
+>>> repr(John)
+"Person('Jack', 70)"
+>>> str(Paul)
+'Jack'
+>>>
+
+
+E:\Python\Lesson_9>python
+Python 3.3.0 (v3.3.0:bd8afb90ebf2, Sep 29 2012, 10:57:17) [MSC v.1600 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from attrmagic import *
+>>> steve = Person("Stevie Wonder")
+ATTR: setting attribute 'name' to 'Stevie Wonder'
+>>> steve.newattr
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Person' object has no attribute 'newattr'
+>>> steve.newattr
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Person' object has no attribute 'newattr'
+>>> steve.newattr
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Person' object has no attribute 'newattr'
+>>> steve.newattr()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Person' object has no attribute 'newattr'
+>>> steve.newattr
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Person' object has no attribute 'newattr'
+>>> steve.name
+'Stevie Wonder'
+>>> steve.__dict__
+{'name': 'Stevie Wonder'}
+>>>

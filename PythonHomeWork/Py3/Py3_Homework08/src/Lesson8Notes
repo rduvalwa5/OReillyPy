@@ -1,0 +1,298 @@
+Lesson 8: Consuming and Creating Binary Data
+From RDuval Wiki
+
+Python_3:_The_Python_Environment
+
+ASCII Character Set
+
+
+Consuming and Creating Binary Data Examples
+
+
+This lesson includes these sections:
+
+Python Data vs. Raw Computer Data
+The struct Module
+
+Python Data vs. Raw Computer Data
+
+ 1. Python can exchange data with arbitrary programs
+      - data you have no control 
+ 2. the external data:
+    - coming to and from files
+    - the console
+    - character or string data
+ 3. understand how it is represented
+    - understand something about character data to start with 
+ 4. using character sets with only a limited number of characters
+    a. acceptable programs for local consumption
+    b. encode their local alphabet so that each character was mapped onto one of the possible values of a byte
+    c. byte contains eight bits, 256 different possible values from 0 to 255
+       1. this mapping referred to as an encoding of a character set
+       2. an agreement that different programs will treat the same byte values as representing the same character
+       3. long time Python's string type used the US ASCII character set
+          a. using one byte to represent each character 
+ 5. computer programs need to be capable of handling multiple languages
+    a. the mid-1980s work began on a way to encode much larger character sets
+       1. with the intention of being able to represent any text at all
+    b. Unicode standard
+       1. Python now uses to represent its strings
+       2. Internally this requires the interpreter to represent each character as two or four bytes
+          a. it depends how the interpreter is built:
+             by default, the four-byte encoding will be used for simplicity
+    c. You won't be working with the extended character set provided by Python 3 in this course
+       but you may find it covered in a later class. 
+ 6. Unicode not memory-efficient way to represent strings
+    a. for external storage and transmission a number of different ways of representing Unicode strings
+       - referred to as encodingsdevised
+    b. most common in the Western world is UTF-8
+       devised so that Unicode strings containing only ASCII characters will encode into the equivalent ASCII strings
+    c. Python installed in Ellipse' default assumption the external encoding of the text strings it reads is UTF-8
+    d. you may find that other Python interpreters have been configured to expect other encodings
+    e. the interpreter is configured by calling sys.getdefaultencoding()
+       1. determine the configuration the contents of text files by calling sys.getfilesystemencoding()
+          a. two will not necessarily be the same
+       2. 
+         >>> import sys
+         >>> sys.getdefaultencoding()
+         'utf-8'
+         >>> sys.getfilesystemencoding()
+         'mbcs'
+ 7. important to be able to communicate in other than character terms
+    a. for example receive a binary file and a description of its layout
+       1. need to convert that data into the necessary Python types in order to be able to operate on it
+    b. need to write your Python data out in a format required by other programs
+       1.  with "raw" computer data types rather than string-based representations
+
+How Computers Represent Data
+
+1. computers only work with a very limited set of different types of data:
+   a. integers (of various sizes)
+   b. floating-point numbers (of various sizes)
+   c. strings of bytes
+2. Data types like Python's dicts and lists are not dealt with directly by the central processing unit (CPU)
+   a.  the interpreter is for: 
+       it is a special-purpose program specifically designed to give you the impression that Python's data types are built in
+3. look at the layout in memory of a Python floating-point number
+   - see that it is more complicated than a regular floating-point number used by the CPU
+   - because the interpreter must maintain overhead of to do things like:
+     1. keeping track of how many references there are to an object 
+        - (so the memory it uses can be reclaimed when it is no longer in use)
+4. other languages would not be able to make any sense out of Python's representation; 
+   they just want the data without any of that overhead. 
+5.how the CPU actually represents the basic data types it is capable of dealing with
+
+   A. there's a module for that in Python: 
+       the struct module allows you to build memory structures (Python bytes objects) 
+       that can be written out to files or transmitted across networks for consumption by other programs
+
+6. The byte is the smallest addressable unit of memory in a modern computer
+   - holds eight bits
+   - bytes object is a sequence of bytes
+     - so it can be subscripted and sliced just like strings and lists
+     - open a file in binary mode and read data from it
+         - get back is a bytes object
+         - No decoding takes place on input, and no encoding on output
+   - When a bytes object is read or written, you get the data transmitted
+     no attempts to change it
+Note
+ Python also implements a bytearray type. This is similar to the bytes type, 
+ but unlike strings and bytes, the bytearray is mutable, 
+ so you can change individual bytes by indexing, or sub-arrays by slicing.  
+7. bytes and bytearray objects allow:
+   - map the individual bytes of a file's contents
+   - map a sequence of bytes read over the network
+8. struct module allows
+   -  interpret these values as the computer's basic data types�bytes, integers, and floating-point numbers
+   - memory the program works with under the hood rather than the Python data types 
+     * is like a large byte array
+     * the index of each byte is usually called its address
+     * Addresses start like Python indexes at zero and go up by ones
+
+Endianness
+
+1. numbers that computers can deal with have grown bigger
+   a. more bits a number has, the larger the range of values it can represent
+      - modern computers, integers (whole numbers) will typically be represented as four bytes
+        (though with the emergence of 64-bit computers, they can also be eight bytes
+      - older machines they would be two bytes
+          referred to as a short 
+      - integers can be signed or unsigned
+         to represent both positive and negative values 
+2. two principal ways to store numbers
+   a. "big-endian" and "little-endian"
+   b. difference is the way that the bytes are stored:
+      - in a big-endian system, the most significant byte of a number is stored at the lowest memory address
+      - in a little-endian system stored at the highest memory address
+   Example
+     1. consider a 16-bit (2-byte) representation of the number 1027
+     2. most significant byte will have the value 4, 
+        the least significant byte will have the value 3 because 1027 = (4 * 256) + 3
+     3. If this is stored at address 325676 in your program's memory
+        a. on a big-endian system it would look like this: 
+        Address    325676   325677
+                 |---------|--------|
+                 |    4    |   3    |
+                 |00000100 |00000011|
+                 +---------|--------+            
+       b. On a little-endian system 
+          the same value stored at the same address would look like this:
+        Address    325676   325677
+                 |---------|--------|
+                 |    3    |   4    |
+                 |00000011 |00000100|
+                 +---------|--------+         
+     4. not seem like much of a difference
+        you have to know which endianness the data has when you are dealing with numbers made up of more than one byte
+        - interpret the numbers wrongly
+     5. same thing occurs with longer values, though the arithmetic involved is more complex
+        a. the following bytes stored in memory starting at address 1367744. 
+        Address   1367744  1367745  1367746  1367747
+                 |--------|--------|--------|--------|
+                 |    4   |   3    |    2   |   1    |
+                 |00000100|00000011|00000010|00000001|
+                 +--------|--------|--------|--------+         
+        big-endian number, its most significant byte would be the 4 shown on the left
+        its value would be (((4*256+3)*256+2)*256+1 = 67,305,985
+        little-endian its most significant byte would be the 1 on the right,
+        its value (((1*256+2)*256+3)*256+4 = 16,909,060
+
+Data Alignment
+
+1. another factor to take into account is the alignment of data
+   - common for data to be aligned so that their starting address is a whole multiple of their size
+     so long (4-byte) integers will always be stored at an address that is an even multiple of 4, and so on 
+2. alignment rules are advisory rather than mandatory
+  -  they are important: due to the way memory access works
+     it can take several times as long for the computer to add two non-aligned integers as it does to add two correctly-aligned ones
+  -  important note that if the data are aligned this way
+     there may be so-called "packing" bytes inserted between values of different sizes
+3. fail to take account of this, you will end up using the wrong bytes
+
+The struct Module
+
+1. struct module 
+    - designed specifically to handle chunks of data that have been stored or transmitted in binaryform to a Python program
+2. read the data either from a file opened in binary mode or across anetwork connection 
+3. module provides an unpack() function to interpret binary data 
+   and convert it to the appropriate 'Python data types
+4. pack() function does the opposite
+   -  taking various Python data and converting them to a bytes object that can be stored 
+      or transmitted for other programs to interpret
+Format Strings
+  a. Both pack() and unpack() require a description of the data types in the bytes
+     -  presented as what the documentation refers to as a format string
+        1.  first character is used to indicate the endianness of the data
+  b. following table, "native" means according to the rules of the particular computer on which the program is running
+    1. "Standard" alignment uses no packing bytes no matter whether items are correctly aligned or not
+       - the first character is none of those shown, 
+       - it is assumed to be part of the format and native settings are assumed
+First Character           Endianness   Packing 
+    @                  Native              Native 
+    =                  Native              Standard 
+    <                  Little-endian       Standard 
+    >                  Big-endian          Standard 
+    !                  Network             Standard 
+                       (same as big-endian) 
+ c. remainder of the format string
+    a description of the individual data items that appear in the bytes object (for unpacking) 
+    or that are to be placed into the bytes object (for packing)
+ d. format characters can be preceded by a number
+    - indicates the number of values of that type to expect 
+      (except when the format character is "s," 
+      in which case it indicates the number of bytes in the string
+ e. table shows the meanings of the various format characters
+ Format                C Data Type     Python Type
+    x            Pad byte              - 
+    c            char                  bytes (length 1) 
+    b            signed char           integer 
+    B            unsigned char         integer 
+    ?            _Bool                 bool
+    h            short                 integer 
+    H            unsigned short        integer 
+    i            int                   integer 
+    I            unsigned int          integer 
+    l            long                  integer 
+    L            unsigned long         integer 
+    q            long long             integer 
+    Q            unsigned long long    integer 
+    f            float                 float 
+    d            double                float 
+    s            char[]                bytes 
+    p            char[]                bytes 
+    P            void*                 integer 
+ f. aren't a C programmer
+    the "C types" may not mean that much
+    All you really need to know is that the unsigned types will always give positive values
+    and that if you try to pack a value that's too large to be held in the field
+    the interpreter will raise an exception
+
+Packing and Unpacking Values
+
+ 1. advantage of passing values in their binary form rather than as characters is that the representation
+    will be exact, as bit-for-bit copies always are.
+ 2. demonstration that storing floating-point data in character form and reading it back can introduce small inaccuracies 
+    There is no test code for this, since it is a simple demonstration program (it could be cast as a test, but this might obscure 
+    the actual differences in values). 
+ 3. Create the Python3_Lesson08 project and assign it to your Python3_Lessons working set
+    Then, in the Python3_Lesson08/src folder, create floattest.py as shown
+    Consuming and Creating Binary Data Examples
+
+
+Lesson 8, Project 1
+
+Instructions:
+1. Create a Python3_Homework08 project and assign it to your Python3_Homework working set. 
+2. In the Python3_Homework08/src folder, create a program named wiretimes.py 
+   - that reads the wireshark.bin data file dumped from the wireshark program 
+     (to get it, right-click the link http://courses.oreillyschool.com/Python3/software/wireshark.bin, 
+      select Save Target As, and save the file to your Python3_Homework08/src folder.). 
+      The file begins with a header: 
+   Wireshark file header:
+   guint32 magic_number; /* magic number */ 
+   guint16 version_major;/* major version number */ 
+   guint16 version_minor;/* minor version number */ 
+   gint32 thiszone; /* GMT to local correction */ 
+   guint32 sigfigs; /* accuracy of timestamps */ 
+   guint32 snaplen; /* max length of captured packets, in octets */ 
+   guint32 network; /* data link type */
+  ---------
+  Each packet is then preceded by a four-entry header:
+  ---------
+  guint32 ts_sec;/* timestamp seconds */ 
+  guint32 ts_usec; /* timestamp microseconds */ 
+  guint32 incl_len;/* number of octets of packet saved in file */ 
+  guint32 orig_len;/* actual length of packet */
+  ----------
+  For more detailed information about the wireshark dump file format, see 
+  http://wiki.wireshark.org/Development/LibpcapFileFormat.
+  -
+  Print the timestamp for each packet in seconds and microseconds.
+  -  
+  Submit wiretimes.py when it is working to your satisfaction.
+
+Lesson 8, Quiz 1
+
+Question 1:
+Name at least two differences between ASCII and Unicode.
+1.  ASCII uses 256 different possible values to represent text.
+2.  Unicode uses more than 110,000 characters covering 100 scripts
+3.  Unicode is an international standard that consists of a set of code charts and encoding methodology and
+    set of standard character encodings
+--
+Question 2:
+What module does Python use to interact with binary data?
+struct module
+pack and unpack functions
+--
+Question 3:
+What do the pack() and unpack() methods of the struct module do?
+-
+unpack() function enable interpretation of binary data
+pack() function encodes into binary
+combined with the format the binary can be defined to specific packing type.
+
+Retrieved from "http://127.0.0.1/mediawiki/index.php/Lesson_8:_Consuming_and_Creating_Binary_Data"
+
+    This page was last modified on 19 August 2013, at 01:05.
+    This page has been accessed 41 times.

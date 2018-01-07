@@ -1,0 +1,19 @@
+2013-11-27 22:28:49,327 - root - ERROR - Name exception: No name attribute
+2013-11-27 22:30:46,637 - root - ERROR - State exception: Rule Match
+2013-11-27 22:31:35,252 - root - ERROR - ZIPCODE exception: Rule Match
+2013-11-27 22:32:32,067 - root - INFO - Creating a new address
+2013-11-27 22:38:02,137 - root - ERROR - ZIPCODE exception: Rule Match
+2013-11-27 22:38:21,183 - root - ERROR - State exception: Rule Match
+2013-11-27 22:38:31,635 - root - ERROR - State exception: Rule Match
+2013-11-27 22:38:45,446 - root - ERROR - State exception: Rule Match
+2013-11-27 22:39:33,882 - root - ERROR - ZIPCODE exception: Rule Match
+2013-11-28 00:44:38,535 - root - INFO - Creating a new address
+2013-11-28 00:44:38,578 - root - INFO - Creating a new address
+2013-11-28 00:44:38,579 - root - ERROR - STATE exception
+2013-11-28 00:44:38,579 - root - ERROR - STATE exception
+2013-11-28 00:44:38,579 - root - ERROR - STATE exception
+2013-11-28 00:44:38,579 - root - ERROR - STATE exception
+2013-11-28 00:44:38,579 - root - INFO - Creating a new address
+2013-11-28 00:44:38,580 - root - ERROR - ZIPCODE exception
+2013-11-28 00:44:38,580 - root - ERROR - ZIPCODE exception
+2013-11-28 00:44:38,580 - root - ERROR - ZIPCODE exception
