@@ -23,3 +23,27 @@ f(23)
 if __name__ == "__main__":
     """ Time it example of callable function"""
     print(timeit("for x in range(3): f(x)", "from __main__ import f", number=1))
+
+'''
+number = 2
+f1(529) called
+None
+f1(529) called
+f1(0) called
+f1(1) called
+f1(4) called
+f1(0) called
+f1(1) called
+f1(4) called
+7.986299999999946e-05
+
+number =1
+f1(529) called
+None
+f1(529) called
+f1(0) called
+f1(1) called
+f1(4) called
+6.843699999999758e-05
+'''
+

@@ -120,7 +120,7 @@ def main(options):
 if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option('-l', '--level', dest="action", action="store", help="Sets the log level to DEBUG, INFO, WARNING, ERROR, and CRITICAL")
-	parser.add_option('-n','--name',dest="action",
+    parser.add_option('-n','--name',dest="action",
 #    parser.add_option('-a', '--action', dest="action", action="store",help="requires -e option. Actions: add/delete")
 #    parser.add_option('-e', '--email', dest="email", action="store", help="email used in the -a option")
 #    parser.add_option('-d', '--display', dest="display",  type="int", action="store",help="show all emails limited by value")    
