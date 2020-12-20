@@ -12,7 +12,7 @@ class TestArray(unittest.TestCase):
             for i in range(N):
                 for j in range(N):
                     self.assertEqual(a[i, j], 0)
-
+       
     def test_identity(self):
         print("Identity")
         for N in range(4):
